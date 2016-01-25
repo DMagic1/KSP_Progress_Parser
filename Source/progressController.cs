@@ -11,8 +11,15 @@ namespace ProgressParser
 	public class progressController : MonoBehaviour
 	{
 		private static bool initialized;
+		private static bool messageIconLoaded;
+		private static Texture2D messageIcon = new Texture2D(32, 32);
 		
 		public static progressController instance;
+
+		public static Texture2D MessageIcon
+		{
+			get { return messageIcon; }
+		}
 
 		private void Start()
 		{
@@ -32,6 +39,36 @@ namespace ProgressParser
 			GameEvents.OnProgressComplete.Add(onComplete);
 		}
 
+		private void loadMessageSystemIcon()
+		{
+			MessageSystem.Message m = new MessageSystem.Message("", "", MessageSystemButton.MessageButtonColor.BLUE, MessageSystemButton.ButtonIcons.MESSAGE);
+
+			if (m == null)
+				return;
+
+			if (m.button == null)
+			{
+				m = null;
+				return;
+			}
+
+			MessageSystemButton b = m.button;
+
+			if (b.iconAchieve == null)
+			{
+				m = null;
+				return;
+			}
+
+			Debug.Log("[Progress Tracking Parser] Message System Icon Loaded");
+
+			messageIcon = (Texture2D)b.iconAchieve;
+
+			messageIconLoaded = true;
+
+			m = null;
+		}
+
 		private void onSceneChange(GameScenes g)
 		{
 			switch (g)
@@ -44,6 +81,9 @@ namespace ProgressParser
 				case GameScenes.SETTINGS:
 					return;
 			}
+
+			if (!messageIconLoaded)
+				loadMessageSystemIcon();
 
 			Debug.Log("[Progress Tracking Parser] Initializing Progress Parser...");
 
