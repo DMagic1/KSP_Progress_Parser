@@ -230,7 +230,7 @@ namespace ProgressParser
 			anyStandard = standardNodes.Values.Any(n => n.IsComplete);
 			anyPOI = pointsOfInterest.Values.Any(n => n.IsComplete);
 			foreach (progressBodyCollection b in bodySubTrees.Values)
-				b.UpdateReacchedStatus();
+				b.UpdateReachedStatus();
 			anyBody = bodySubTrees.Values.Any(n => n.IsReached);
 		}
 

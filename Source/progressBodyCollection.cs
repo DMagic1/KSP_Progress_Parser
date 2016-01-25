@@ -187,7 +187,7 @@ namespace ProgressParser
 			get { return homeworld; }
 		}
 
-		public void UpdateReacchedStatus()
+		public void UpdateReachedStatus()
 		{
 			isReached = bodyNodes.Values.Any(n => n.IsComplete);
 		}
