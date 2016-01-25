@@ -60,9 +60,30 @@ namespace ProgressParser
 				return;
 			}
 
-			Debug.Log("[Progress Tracking Parser] Message System Icon Loaded");
+			messageIcon = new Texture2D(b.iconAchieve.width, b.iconAchieve.height);
 
-			messageIcon = (Texture2D)b.iconAchieve;
+			var rt = RenderTexture.GetTemporary(b.iconAchieve.width, b.iconAchieve.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
+
+			Graphics.Blit(b.iconAchieve, rt);
+
+			RenderTexture.active = rt;
+
+			messageIcon.ReadPixels(new Rect(0, 0, b.iconAchieve.width, b.iconAchieve.height), 0 , 0);
+
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary(rt);
+
+			rt = null;
+
+			var pix = messageIcon.GetPixels(4, 4, 24, 24);
+
+			messageIcon = new Texture2D(24, 24);
+
+			messageIcon.SetPixels(pix);
+
+			messageIcon.Apply();
+
+			Debug.Log("[Progress Tracking Parser] Message System Icon Loaded");
 
 			messageIconLoaded = true;
 
@@ -258,14 +279,21 @@ namespace ProgressParser
 		{
 			Type t = n.GetType();
 
-			if (t == typeof(RecordsAltitude))
-				return true;
-			else if (t == typeof(RecordsDepth))
-				return true;
-			else if (t == typeof(RecordsDistance))
-				return true;
-			else if (t == typeof(RecordsSpeed))
-				return true;
+			try
+			{
+				if (t == typeof(RecordsAltitude))
+					return true;
+				else if (t == typeof(RecordsDepth))
+					return true;
+				else if (t == typeof(RecordsDistance))
+					return true;
+				else if (t == typeof(RecordsSpeed))
+					return true;
+			}
+			catch (Exception e)
+			{
+				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Interval Progress Node Record Value\n" + e);
+			}
 
 			return false;
 		}
