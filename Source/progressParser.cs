@@ -1,4 +1,29 @@
-﻿using System;
+﻿#region license
+/*The MIT License (MIT)
+Progress Parser - A static class responsible for parsing the stock progress tree and caching relevant values
+Copyright (c) 2016 DMagic
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#endregion
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +119,7 @@ namespace ProgressParser
 		public const string POITyloCaveDescriptor = "Cave";
 		public const string POIValIceHengeDescriptor = "Ice Henge";
 
+		//Notes for completed progress nodes where available; the {0} is replaced by the vessel or crew involved; the {1} is replaced by the date of completion
 		public const string StandardNote = "Completed By {0} On {1}";
 		public const string CrewNote = "Performed By {0} On {1}";
 		public const string RecoveryNote = "Recovered {0} On {1}";
@@ -102,10 +128,11 @@ namespace ProgressParser
 		public const string POINote = "Discovered By {0} On {1}";
 
 		private static bool loading;
-		public static string gameTitle;
+		private static string gameTitle;
 
 		public static void initialize(Game g)
 		{
+			//Only re-parse the progress tree when a new game is loaded
 			if (g.Title == gameTitle)
 				return;
 
@@ -129,6 +156,7 @@ namespace ProgressParser
 
 			if (timer >= 500)
 			{
+				Debug.Log("[Progress Tracking Parser] Progress Parser Timed Out");
 				loading = false;
 				yield break;
 			}
@@ -155,13 +183,6 @@ namespace ProgressParser
 				CelestialBodySubtree b = ProgressTracking.Instance.celestialBodyNodes[i];
 
 				loadNextBodyNode(b);
-			}
-
-			if (timer >= 500)
-			{
-				Debug.Log("[Progress Tracking Parser] Progress Parser Timed Out");
-				loading = false;
-				yield break;
 			}
 
 			updateCompletionRecord();
@@ -361,6 +382,9 @@ namespace ProgressParser
 
 		public static void addBodySubTree(CelestialBodySubtree body)
 		{
+			if (body == null)
+				return;
+
 			if (body.Body == null)
 				return;
 
