@@ -1,6 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿#region license
+/*The MIT License (MIT)
+Progress Controller - A Monobehaviour for montioring progress node activity and loading the parser
+
+Copyright (c) 2016 DMagic
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+#endregion
+
+using System;
 using System.Reflection;
 using UnityEngine;
 using KSPAchievements;
@@ -11,15 +35,8 @@ namespace ProgressParser
 	public class progressController : MonoBehaviour
 	{
 		private static bool initialized;
-		private static bool messageIconLoaded;
-		private static Texture2D messageIcon = new Texture2D(32, 32);
 		
 		public static progressController instance;
-
-		public static Texture2D MessageIcon
-		{
-			get { return messageIcon; }
-		}
 
 		private void Start()
 		{
@@ -39,57 +56,6 @@ namespace ProgressParser
 			GameEvents.OnProgressComplete.Add(onComplete);
 		}
 
-		private void loadMessageSystemIcon()
-		{
-			MessageSystem.Message m = new MessageSystem.Message("", "", MessageSystemButton.MessageButtonColor.BLUE, MessageSystemButton.ButtonIcons.MESSAGE);
-
-			if (m == null)
-				return;
-
-			if (m.button == null)
-			{
-				m = null;
-				return;
-			}
-
-			MessageSystemButton b = m.button;
-
-			if (b.iconAchieve == null)
-			{
-				m = null;
-				return;
-			}
-
-			messageIcon = new Texture2D(b.iconAchieve.width, b.iconAchieve.height);
-
-			var rt = RenderTexture.GetTemporary(b.iconAchieve.width, b.iconAchieve.height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.sRGB, 1);
-
-			Graphics.Blit(b.iconAchieve, rt);
-
-			RenderTexture.active = rt;
-
-			messageIcon.ReadPixels(new Rect(0, 0, b.iconAchieve.width, b.iconAchieve.height), 0 , 0);
-
-			RenderTexture.active = null;
-			RenderTexture.ReleaseTemporary(rt);
-
-			rt = null;
-
-			var pix = messageIcon.GetPixels(4, 4, 24, 24);
-
-			messageIcon = new Texture2D(24, 24);
-
-			messageIcon.SetPixels(pix);
-
-			messageIcon.Apply();
-
-			Debug.Log("[Progress Tracking Parser] Message System Icon Loaded");
-
-			messageIconLoaded = true;
-
-			m = null;
-		}
-
 		private void onSceneChange(GameScenes g)
 		{
 			switch (g)
@@ -103,9 +69,6 @@ namespace ProgressParser
 					return;
 			}
 
-			if (!messageIconLoaded)
-				loadMessageSystemIcon();
-
 			Debug.Log("[Progress Tracking Parser] Initializing Progress Parser...");
 
 			progressParser.initialize(HighLogic.CurrentGame);
@@ -113,8 +76,6 @@ namespace ProgressParser
 
 		private void onReach(ProgressNode node)
 		{
-			Debug.Log("Reaching A Node...");
-
 			if (node == null)
 				return;
 
@@ -128,8 +89,6 @@ namespace ProgressParser
 
 					if (i.getRecord(i.Interval) >= nodeRecord)
 						return;
-
-					Debug.Log("Interval Node Processing On Reach...: " + i.Interval.ToString());
 
 					if (node.IsReached)
 					{
@@ -144,8 +103,6 @@ namespace ProgressParser
 
 		private void onAchieve(ProgressNode node)
 		{
-			Debug.Log("Achieving A Node...");
-
 			if (node == null)
 				return;
 
@@ -159,8 +116,6 @@ namespace ProgressParser
 
 					if (i.getRecord(i.Interval) >= nodeRecord)
 						return;
-
-					Debug.Log("Interval Node Processing On Achieve...: " + i.Interval.ToString());
 
 					if (node.IsReached)
 					{
@@ -203,10 +158,23 @@ namespace ProgressParser
 				{
 					progressStandard s = progressParser.getPOINode(node.Id);
 
-					if (s != null)
+					if (s == null)
+					{
+						Debug.Log("[Progress Tracking Parser] POI Progress Node Not Found");
+					}
+					else
 					{
 						s.calculateRewards(null);
 						s.NoteReference = progressParser.vesselNameFromNode(node);
+
+						try
+						{
+							s.Time = (double)node.GetType().GetField("AchieveDate", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(node);
+						}
+						catch (Exception e)
+						{
+							Debug.LogWarning("[Progress Tracking Parser] Error In Detecting Progress Node Achievement Date\n" + e);
+						}
 					}
 				}
 				else
@@ -222,6 +190,15 @@ namespace ProgressParser
 							note = progressParser.vesselNameFromNode(node);
 
 						s.NoteReference = note;
+
+						try
+						{
+							s.Time = (double)node.GetType().GetField("AchieveDate", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(node);
+						}
+						catch (Exception e)
+						{
+							Debug.LogWarning("[Progress Tracking Parser] Error In Detecting Progress Node Achievement Date\n" + e);
+						}
 					}
 					else
 					{
@@ -252,6 +229,15 @@ namespace ProgressParser
 										note = progressParser.vesselNameFromNode(node);
 
 									sb.NoteReference = note;
+
+									try
+									{
+										sb.Time = (double)node.GetType().GetField("AchieveDate", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(node);
+									}
+									catch (Exception e)
+									{
+										Debug.LogWarning("[Progress Tracking Parser] Error In Detecting Progress Node Achievement Date\n" + e);
+									}
 								}
 							}
 						}
@@ -262,7 +248,11 @@ namespace ProgressParser
 			{
 				progressInterval i = progressParser.getIntervalNode(node.Id);
 
-				if (i != null)
+				if (i == null)
+				{
+					Debug.Log("[Progress Tracking Parser] Interval Progress Node Not Found");
+				}
+				else
 				{
 					if (node.IsReached)
 					{
@@ -273,27 +263,20 @@ namespace ProgressParser
 			}
 
 			progressParser.updateCompletionRecord();
-		}	
+		}
 
 		private bool isIntervalType(ProgressNode n)
 		{
 			Type t = n.GetType();
 
-			try
-			{
-				if (t == typeof(RecordsAltitude))
-					return true;
-				else if (t == typeof(RecordsDepth))
-					return true;
-				else if (t == typeof(RecordsDistance))
-					return true;
-				else if (t == typeof(RecordsSpeed))
-					return true;
-			}
-			catch (Exception e)
-			{
-				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Interval Progress Node Record Value\n" + e);
-			}
+			if (t == typeof(RecordsAltitude))
+				return true;
+			else if (t == typeof(RecordsDepth))
+				return true;
+			else if (t == typeof(RecordsDistance))
+				return true;
+			else if (t == typeof(RecordsSpeed))
+				return true;
 
 			return false;
 		}
