@@ -71,7 +71,7 @@ namespace ProgressParser
 
 			Debug.Log("[Progress Tracking Parser] Initializing Progress Parser...");
 
-			progressParser.initialize(HighLogic.CurrentGame);
+			progressParser.initialize();
 		}
 
 		private void onReach(ProgressNode node)

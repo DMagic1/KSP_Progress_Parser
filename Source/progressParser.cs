@@ -128,16 +128,9 @@ namespace ProgressParser
 		public const string POINote = "Discovered By {0} On {1}";
 
 		private static bool loading;
-		private static string gameTitle;
 
-		public static void initialize(Game g)
+		public static void initialize()
 		{
-			//Only re-parse the progress tree when a new game is loaded
-			if (g.Title == gameTitle)
-				return;
-
-			gameTitle = g.Title;
-
 			if (!loading)
 				progressController.instance.StartCoroutine(parseProgressTree());
 		}
@@ -167,8 +160,6 @@ namespace ProgressParser
 				yield return null;
 			}
 
-			timer = 0;
-
 			bodySubTrees.Clear();
 			standardNodes.Clear();
 			intervalNodes.Clear();
@@ -186,6 +177,8 @@ namespace ProgressParser
 			}
 
 			updateCompletionRecord();
+
+			Debug.Log("[Progress Tracking Parser] Progress Nodes Loaded...");
 
 			loading = false;
 		}
