@@ -69,6 +69,8 @@ namespace ProgressParser
 					return;
 			}
 
+			progressParser.Loaded = false;
+
 			Debug.Log("[Progress Tracking Parser] Initializing Progress Parser...");
 
 			progressParser.initialize();

@@ -63,6 +63,8 @@ namespace ProgressParser
 		private static bool anyPOI;
 		private static bool anyBody;
 
+		public static EventVoid onProgressParsed = new EventVoid("onProgressParsed");
+
 		//A series of simple string descriptions for each progress node; the body-specific nodes substitute the body's name for the {0}
 		public const string altitudeDescriptor = "Altitude";
 		public const string speedDescriptor = "Speed";
@@ -127,17 +129,16 @@ namespace ProgressParser
 		public const string FacilityNote = "Constructed {0} On {1}";
 		public const string POINote = "Discovered By {0} On {1}";
 
-		private static bool loading;
+		private static bool loaded;
 
 		public static void initialize()
 		{
-			if (!loading)
 				progressController.instance.StartCoroutine(parseProgressTree());
 		}
 
 		private static IEnumerator parseProgressTree()
 		{
-			loading = true;
+			loaded = false;
 
 			int timer = 0;
 
@@ -150,7 +151,7 @@ namespace ProgressParser
 			if (timer >= 500)
 			{
 				Debug.Log("[Progress Tracking Parser] Progress Parser Timed Out");
-				loading = false;
+				loaded = false;
 				yield break;
 			}
 
@@ -178,9 +179,11 @@ namespace ProgressParser
 
 			updateCompletionRecord();
 
-			Debug.Log("[Progress Tracking Parser] Progress Nodes Loaded...");
+			loaded = true;
 
-			loading = false;
+			onProgressParsed.Fire();
+
+			Debug.Log("[Progress Tracking Parser] Progress Nodes Loaded...");
 		}
 
 		private static void loadIntervalNodes()
@@ -565,9 +568,10 @@ namespace ProgressParser
 			get { return anyBody; }
 		}
 
-		public static bool Loading
+		public static bool Loaded
 		{
-			get { return loading; }
+			get { return loaded; }
+			internal set { loaded = value; }
 		}
 
 		public static progressInterval Altitude
