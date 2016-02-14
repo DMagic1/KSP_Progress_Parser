@@ -60,14 +60,14 @@ namespace ProgressParser
 		private progressStandard rendezvous;
 
 		private bool homeworld = false;
-		private string bodyName;
+		private CelestialBody body;
 		private bool isReached;
 
 		public progressBodyCollection() { }
 
 		public progressBodyCollection(CelestialBodySubtree b)
 		{
-			bodyName = b.Body.theName;
+			body = b.Body;
 
 			if (b.Body.isHomeWorld)
 			{
@@ -198,26 +198,7 @@ namespace ProgressParser
 
 		public CelestialBody Body
 		{
-			get
-			{
-				if (string.IsNullOrEmpty(bodyName))
-					return null;
-
-				try
-				{
-					return FlightGlobals.Bodies.FirstOrDefault(b => b.theName == bodyName);
-				}
-				catch (Exception e)
-				{
-					Debug.LogWarning("[Progress Tracking Parser] Error In Detecting Progress Node Celestial Body\n" + e);
-					return null;
-				}
-			}
-		}
-
-		public string BodyName
-		{
-			get { return bodyName; }
+			get { return body; }
 		}
 
 		public bool HomeWorld
