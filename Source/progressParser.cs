@@ -133,7 +133,7 @@ namespace ProgressParser
 
 		public static void initialize()
 		{
-				progressController.instance.StartCoroutine(parseProgressTree());
+			progressController.instance.StartCoroutine(parseProgressTree());
 		}
 
 		private static IEnumerator parseProgressTree()

@@ -66,6 +66,7 @@ namespace ProgressParser
 				case GameScenes.MAINMENU:
 				case GameScenes.PSYSTEM:
 				case GameScenes.SETTINGS:
+				case GameScenes.EDITOR:
 					return;
 			}
 
