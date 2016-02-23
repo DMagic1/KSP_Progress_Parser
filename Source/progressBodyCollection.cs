@@ -86,7 +86,7 @@ namespace ProgressParser
 			addProgressStandard(ProgressType.BASECONSTRUCTION, b.Body, b.baseConstruction, progressParser.baseDescriptor, progressParser.FacilityNote, progressParser.vesselNameFromNode(b.baseConstruction));
 			addProgressStandard(ProgressType.CREWTRANSFER, b.Body, b.crewTransfer, progressParser.crewTransferDescriptor);
 			addProgressStandard(ProgressType.DOCKING, b.Body, b.docking, progressParser.dockingDescriptor);
-			addProgressStandard(ProgressType.FLAGPLANT, b.Body, b.flagPlant, progressParser.flagDescriptor, progressParser.FlagNote, progressParser.crewNameFromNode(b.flagPlant));
+			addProgressStandard(ProgressType.FLAGPLANT, b.Body, b.flagPlant, progressParser.flagDescriptor);
 			addProgressStandard(ProgressType.LANDING, b.Body, b.landing, progressParser.landingDescriptor, progressParser.StandardNote, progressParser.vesselNameFromNode(b.landing));
 			addProgressStandard(ProgressType.ORBIT, b.Body, b.orbit, progressParser.orbitDescriptor, progressParser.StandardNote, progressParser.vesselNameFromNode(b.orbit));
 			addProgressStandard(ProgressType.ORBITRETURN, b.Body, b.returnFromOrbit, progressParser.returnOrbitDescriptor, progressParser.RecoveryNote, progressParser.vesselNameFromNode(b.returnFromOrbit));

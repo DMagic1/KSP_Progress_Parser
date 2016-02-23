@@ -443,9 +443,9 @@ namespace ProgressParser
 
 			try
 			{				
-				if (t == typeof(FlagPlant))
-					return (CrewRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
-				else if (t == typeof(Spacewalk))
+				//if (t == typeof(FlagPlant))
+				//	return (CrewRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
+				if (t == typeof(Spacewalk))
 					return (CrewRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
 				else if (t == typeof(SurfaceEVA))
 					return (CrewRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
