@@ -36,7 +36,7 @@ namespace ProgressParser
 {
 	public class progressStandard
 	{
-		private string bodyName;
+		private CelestialBody body;
 		private ProgressType pType;
 		private string id;
 		private string descriptor;
@@ -44,9 +44,8 @@ namespace ProgressParser
 		private string noteReference;
 		private double time;
 
-		private float fundsReward;
-		private float sciReward;
-		private float repReward;
+		private float fundsReward, sciReward, repReward;
+		private string fundsRewardString, sciRewardString, repRewardString;
 
 		private bool hasRewards;
 		private bool isComplete;
@@ -56,7 +55,7 @@ namespace ProgressParser
 		public progressStandard(CelestialBody b, ProgressType t, ProgressNode n, string s = "", string g = "", string r = "", bool rewards = true)
 		{
 			if (b != null)
-				bodyName = b.bodyName;
+				body = b;
 
 			pType = t;
 			hasRewards = rewards;
@@ -88,30 +87,26 @@ namespace ProgressParser
 			fundsReward = ProgressUtilities.WorldFirstStandardReward(ProgressRewardType.PROGRESS, Currency.Funds, pType, body);
 			sciReward = ProgressUtilities.WorldFirstStandardReward(ProgressRewardType.PROGRESS, Currency.Science, pType, body);
 			repReward = ProgressUtilities.WorldFirstStandardReward(ProgressRewardType.PROGRESS, Currency.Reputation, pType, body);
+
+			if (fundsReward != 0)
+				fundsRewardString = fundsReward.ToString("F0");
+			else
+				fundsRewardString = "";
+
+			if (sciReward != 0)
+				sciRewardString = sciReward.ToString("F0");
+			else
+				sciRewardString = "";
+
+			if (repReward != 0)
+				repRewardString = repReward.ToString("F0");
+			else
+				repRewardString = "";
 		}
 
 		public CelestialBody Body
 		{
-			get
-			{
-				if (string.IsNullOrEmpty(bodyName))
-					return null;
-
-				try
-				{
-					return FlightGlobals.Bodies.FirstOrDefault(b => b.bodyName == bodyName);
-				}
-				catch (Exception e)
-				{
-					Debug.LogWarning("[Progress Tracking Parser] Error In Detecting Progress Node Celestial Body\n" + e);
-					return null;
-				}
-			}
-		}
-
-		public string BodyName
-		{
-			get { return bodyName; }
+			get { return body; }
 		}
 
 		public bool HasRewards
@@ -187,6 +182,21 @@ namespace ProgressParser
 		public float RepReward
 		{
 			get { return repReward; }
+		}
+
+		public string FundsRewardString
+		{
+			get { return fundsRewardString; }
+		}
+
+		public string SciRewardString
+		{
+			get { return sciRewardString; }
+		}
+
+		public string RepRewardString
+		{
+			get { return repRewardString; }
 		}
 	}
 }

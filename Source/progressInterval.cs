@@ -183,5 +183,38 @@ namespace ProgressParser
 			return 0;
 		}
 
+		public string getFundsString(int i)
+		{
+			if (rewards.Count > i)
+			{	
+				if (rewards[i].x != 0)
+					return rewards[i].x.ToString("F0");
+			}
+
+			return "";
+		}
+
+		public string getScienceString(int i)
+		{
+			if (rewards.Count > i)
+			{
+				if (rewards[i].y != 0)
+					return rewards[i].y.ToString("F0");
+			}
+
+			return "";
+		}
+
+		public string getRepString(int i)
+		{
+			if (rewards.Count > i)
+			{
+				if (rewards[i].z != 0)
+					return rewards[i].z.ToString("F0");
+			}
+
+			return "";
+		}
+
 	}
 }

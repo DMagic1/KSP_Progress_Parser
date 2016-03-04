@@ -66,12 +66,15 @@ namespace ProgressParser
 				case GameScenes.MAINMENU:
 				case GameScenes.PSYSTEM:
 				case GameScenes.SETTINGS:
+				case GameScenes.EDITOR:
 					return;
 			}
 
+			progressParser.Loaded = false;
+
 			Debug.Log("[Progress Tracking Parser] Initializing Progress Parser...");
 
-			progressParser.initialize(HighLogic.CurrentGame);
+			progressParser.initialize();
 		}
 
 		private void onReach(ProgressNode node)
