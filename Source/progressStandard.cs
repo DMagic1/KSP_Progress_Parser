@@ -130,9 +130,9 @@ namespace ProgressParser
 			get
 			{
 				if (GameSettings.KERBIN_TIME)
-					return KSPUtil.GetKerbinDateFromUT((int)time);
+					return ((KSPUtil.DefaultDateTimeFormatter)KSPUtil.dateTimeFormatter).GetKerbinDateFromUT((int)time);
 				else
-					return KSPUtil.GetEarthDateFromUT((int)time);
+					return ((KSPUtil.DefaultDateTimeFormatter)KSPUtil.dateTimeFormatter).GetEarthDateFromUT((int)time);
 			}
 		}
 
