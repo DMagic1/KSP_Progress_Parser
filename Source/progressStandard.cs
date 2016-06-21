@@ -125,17 +125,6 @@ namespace ProgressParser
 			set { time = value; }
 		}
 
-		public int[] KSPDate
-		{
-			get
-			{
-				if (GameSettings.KERBIN_TIME)
-					return ((KSPUtil.DefaultDateTimeFormatter)KSPUtil.dateTimeFormatter).GetKerbinDateFromUT((int)time);
-				else
-					return ((KSPUtil.DefaultDateTimeFormatter)KSPUtil.dateTimeFormatter).GetEarthDateFromUT((int)time);
-			}
-		}
-
 		public string KSPDateString
 		{
 			get { return KSPUtil.PrintDate((int)time, false, false); }
