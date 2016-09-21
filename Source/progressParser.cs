@@ -39,12 +39,12 @@ namespace ProgressParser
 	public static class progressParser
 	{
 		//Store a list of each celestial body sub node; accessible by the celestial body name
-		private static Dictionary<string, progressBodyCollection> bodySubTrees = new Dictionary<string, progressBodyCollection>();
+		private static DictionaryValueList<string, progressBodyCollection> bodySubTrees = new DictionaryValueList<string, progressBodyCollection>();
 
 		//Store a list of each progress node type; accessible by the progress node ID
-		private static Dictionary<string, progressStandard> pointsOfInterest = new Dictionary<string, progressStandard>();
-		private static Dictionary<string, progressInterval> intervalNodes = new Dictionary<string, progressInterval>();
-		private static Dictionary<string, progressStandard> standardNodes = new Dictionary<string, progressStandard>();
+		private static DictionaryValueList<string, progressStandard> pointsOfInterest = new DictionaryValueList<string, progressStandard>();
+		private static DictionaryValueList<string, progressInterval> intervalNodes = new DictionaryValueList<string, progressInterval>();
+		private static DictionaryValueList<string, progressStandard> standardNodes = new DictionaryValueList<string, progressStandard>();
 
 		//Store each general progress node type here; POI nodes excepted
 		private static progressInterval altitude;
@@ -256,7 +256,7 @@ namespace ProgressParser
 			if (n == null)
 				return;
 
-			if (intervalNodes.ContainsKey(n.Id))
+			if (intervalNodes.Contains(n.Id))
 				return;
 
 			progressInterval i = null;
@@ -307,7 +307,7 @@ namespace ProgressParser
 			if (n == null)
 				return;
 
-			if (standardNodes.ContainsKey(n.Id))
+			if (standardNodes.Contains(n.Id))
 				return;
 
 			progressStandard s = null;
@@ -368,7 +368,7 @@ namespace ProgressParser
 
 		public static void addPointOfInterest(ProgressNode n, string d, string name, string note, string r = "")
 		{
-			if (pointsOfInterest.ContainsKey(name))
+			if (pointsOfInterest.Contains(name))
 				return;
 
 			progressStandard s = new progressStandard(null, ProgressType.POINTOFINTEREST, n, d, note, r);
@@ -384,7 +384,7 @@ namespace ProgressParser
 			if (body.Body == null)
 				return;
 
-			if (bodySubTrees.ContainsKey(body.Body.theName))
+			if (bodySubTrees.Contains(body.Body.theName))
 				return;			
 
 			bodySubTrees.Add(body.Body.theName, new progressBodyCollection(body));
@@ -490,7 +490,7 @@ namespace ProgressParser
 			if (b == null)
 				return null;
 
-			if (bodySubTrees.ContainsKey(b.theName))
+			if (bodySubTrees.Contains(b.theName))
 				return bodySubTrees[b.theName];
 
 			return null;
@@ -498,7 +498,7 @@ namespace ProgressParser
 
 		public static progressBodyCollection getProgressBody(string bodyName)
 		{
-			if (bodySubTrees.ContainsKey(bodyName))
+			if (bodySubTrees.Contains(bodyName))
 				return bodySubTrees[bodyName];
 
 			return null;
@@ -511,7 +511,7 @@ namespace ProgressParser
 
 		public static progressStandard getPOINode(string name)
 		{
-			if (pointsOfInterest.ContainsKey(name))
+			if (pointsOfInterest.Contains(name))
 				return pointsOfInterest[name];
 
 			return null;
@@ -519,7 +519,7 @@ namespace ProgressParser
 
 		public static progressStandard getStandardNode(string id)
 		{
-			if (standardNodes.ContainsKey(id))
+			if (standardNodes.Contains(id))
 				return standardNodes[id];
 
 			return null;
@@ -527,7 +527,7 @@ namespace ProgressParser
 
 		public static progressInterval getIntervalNode(string id)
 		{
-			if (intervalNodes.ContainsKey(id))
+			if (intervalNodes.Contains(id))
 				return intervalNodes[id];
 
 			return null;
