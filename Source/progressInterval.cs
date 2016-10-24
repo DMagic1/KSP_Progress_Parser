@@ -143,6 +143,11 @@ namespace ProgressParser
 			}
 		}
 
+		public int TotalIntervals
+		{
+			get { return totalIntervals; }
+		}
+
 		public int getRecord(int index)
 		{
 			if (records.Count > index)

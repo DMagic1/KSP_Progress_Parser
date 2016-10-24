@@ -39,12 +39,12 @@ namespace ProgressParser
 	public static class progressParser
 	{
 		//Store a list of each celestial body sub node; accessible by the celestial body name
-		private static Dictionary<string, progressBodyCollection> bodySubTrees = new Dictionary<string, progressBodyCollection>();
+		private static DictionaryValueList<string, progressBodyCollection> bodySubTrees = new DictionaryValueList<string, progressBodyCollection>();
 
 		//Store a list of each progress node type; accessible by the progress node ID
-		private static Dictionary<string, progressStandard> pointsOfInterest = new Dictionary<string, progressStandard>();
-		private static Dictionary<string, progressInterval> intervalNodes = new Dictionary<string, progressInterval>();
-		private static Dictionary<string, progressStandard> standardNodes = new Dictionary<string, progressStandard>();
+		private static DictionaryValueList<string, progressStandard> pointsOfInterest = new DictionaryValueList<string, progressStandard>();
+		private static DictionaryValueList<string, progressInterval> intervalNodes = new DictionaryValueList<string, progressInterval>();
+		private static DictionaryValueList<string, progressStandard> standardNodes = new DictionaryValueList<string, progressStandard>();
 
 		//Store each general progress node type here; POI nodes excepted
 		private static progressInterval altitude;
@@ -75,6 +75,7 @@ namespace ProgressParser
 		public const string firstLaunchDescriptor = "First Launch";
 		public const string reachSpaceDescriptor = "Reached Space";
 		public const string runwayDescriptor = "Landed On The Runway";
+		public const string kscDescriptor = "Landed At The KSC";
 		public const string launchpadDescriptor = "Landed On The Launchpad";
 		public const string towerBuzzDescriptor = "Buzzed The Tower";
 
@@ -98,28 +99,29 @@ namespace ProgressParser
 		public const string baseDescriptor = "Escaped {0}'s Gravity";
 		public const string rendezvousDescriptor = "Performed A Rendezvous At {0}";
 
-		public const string POIBopKrakenDescriptor = "Dead Kraken";
-		public const string POIDunaFaceDescriptor = "Face";
-		public const string POIDunaMSLDescriptor = "MSL";
-		public const string POIDunaPyramidDescriptor = "Pyramid";
+		public const string POIBopKrakenDescriptor = "Dead Kraken on Bop";
+		public const string POIDunaFaceDescriptor = "Duna Face";
+		public const string POIDunaMSLDescriptor = "Duna MSL";
+		public const string POIDunaPyramidDescriptor = "Duna Pyramid";
 		public const string POIKerbinIslandAirfieldDescriptor = "Island Airfield";
 		public const string POIKerbinKSC2Descriptor = "KSC 2";
-		public const string POIKerbinMonolith1Descriptor = "Monolith 1";
-		public const string POIKerbinMonolith2Descriptor = "Monolith 2";
-		public const string POIKerbinMonolith3Descriptor = "Monolith 3";
-		public const string POIKerbinPyramidsDescriptor = "Pyramids";
-		public const string POIKerbinUFODescriptor = "UFO";
-		public const string POIMinmusMonolithDescriptor = "Monolith";
-		public const string POIMunArmstrongDescriptor = "Neil Armstrong Memorial";
-		public const string POIMunMonolith1Descriptor = "Monolith 1";
-		public const string POIMunMonolith2Descriptor = "Monolith 2";
-		public const string POIMunMonolith3Descriptor = "Monolith 3";
-		public const string POIMunRockArch1Descriptor = "Rock Arch 1";
-		public const string POIMunRockArch2Descriptor = "Rock Arch 2";
-		public const string POIMunRockArch3Descriptor = "Rock Arch 3";
-		public const string POIMunUFODescriptor = "UFO";
-		public const string POITyloCaveDescriptor = "Cave";
-		public const string POIValIceHengeDescriptor = "Ice Henge";
+		public const string POIKerbinMonolith1Descriptor = "Kerbin Monolith 1";
+		public const string POIKerbinMonolith2Descriptor = "Kerbin Monolith 2";
+		public const string POIKerbinMonolith3Descriptor = "Kerbin Monolith 3";
+		public const string POIKerbinPyramidsDescriptor = "Kerbin Pyramids";
+		public const string POIKerbinUFODescriptor = "Kerbin UFO";
+		public const string POIMinmusMonolithDescriptor = "Minmus Monolith";
+		public const string POIMunArmstrongDescriptor = "Neil Armstrong Memorial on the Mun";
+		public const string POIMunMonolith1Descriptor = "Mun Monolith 1";
+		public const string POIMunMonolith2Descriptor = "Mun Monolith 2";
+		public const string POIMunMonolith3Descriptor = "Mun Monolith 3";
+		public const string POIMunRockArch1Descriptor = "Mun Rock Arch 1";
+		public const string POIMunRockArch2Descriptor = "Mun Rock Arch 2";
+		public const string POIMunRockArch3Descriptor = "Mun Rock Arch 3";
+		public const string POIMunUFODescriptor = "Mun UFO";
+		public const string POITyloCaveDescriptor = "Cave on Tylo";
+		public const string POIValIceHengeDescriptor = "Vall Ice Henge";
+		public const string POIRandolithDescriptor = "{0} Randolith";
 
 		//Notes for completed progress nodes where available; the {0} is replaced by the vessel or crew involved; the {1} is replaced by the date of completion
 		public const string StandardNote = "Completed By {0} On {1}";
@@ -200,7 +202,8 @@ namespace ProgressParser
 			addProgressStandard(ProgressType.FIRSTLAUNCH, ProgressTracking.Instance.firstLaunch, "", firstLaunchDescriptor);
 			addProgressStandard(ProgressType.REACHSPACE, ProgressTracking.Instance.reachSpace, "", reachSpaceDescriptor, StandardNote, vesselNameFromNode(ProgressTracking.Instance.reachSpace));
 			addProgressStandard(ProgressType.STUNT, ProgressTracking.Instance.towerBuzz, ProgressTracking.Instance.towerBuzz.Id, towerBuzzDescriptor, StandardNote, vesselNameFromNode(ProgressTracking.Instance.towerBuzz));
-			addProgressStandard(ProgressType.STUNT, ProgressTracking.Instance.KSCLanding, ProgressTracking.Instance.KSCLanding.Id, launchpadDescriptor);
+			addProgressStandard(ProgressType.STUNT, ProgressTracking.Instance.KSCLanding, ProgressTracking.Instance.KSCLanding.Id, kscDescriptor);
+			addProgressStandard(ProgressType.STUNT, ProgressTracking.Instance.launchpadLanding, ProgressTracking.Instance.launchpadLanding.Id, launchpadDescriptor);
 			addProgressStandard(ProgressType.STUNT, ProgressTracking.Instance.runwayLanding, ProgressTracking.Instance.runwayLanding.Id, runwayDescriptor);
 		}
 
@@ -228,6 +231,22 @@ namespace ProgressParser
 			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIMunUFO, ProgressTracking.Instance.POIMunUFO.Id, POIMunUFODescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIMunUFO));
 			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POITyloCave, ProgressTracking.Instance.POITyloCave.Id, POITyloCaveDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POITyloCave));
 			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIVallIcehenge, ProgressTracking.Instance.POIVallIcehenge.Id, POIValIceHengeDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIVallIcehenge));
+			
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIBopRandolith, ProgressTracking.Instance.POIBopRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIBopRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIDresRandolith, ProgressTracking.Instance.POIDresRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIDresRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIDunaRandolith, ProgressTracking.Instance.POIDunaRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIDunaRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIEelooRandolith, ProgressTracking.Instance.POIEelooRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIEelooRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIEveRandolith, ProgressTracking.Instance.POIEveRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIEveRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIGillyRandolith, ProgressTracking.Instance.POIGillyRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIGillyRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIIkeRandolith, ProgressTracking.Instance.POIIkeRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIIkeRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIKerbinRandolith, ProgressTracking.Instance.POIKerbinRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIKerbinRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POILaytheRandolith, ProgressTracking.Instance.POILaytheRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POILaytheRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIMinmusRandolith, ProgressTracking.Instance.POIMinmusRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIMinmusRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIMohoRandolith, ProgressTracking.Instance.POIMohoRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIMohoRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIMunRandolith, ProgressTracking.Instance.POIMunRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIMunRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIPolRandolith, ProgressTracking.Instance.POIPolRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIPolRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POITyloRandolith, ProgressTracking.Instance.POITyloRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POITyloRandolith));
+			addProgressStandard(ProgressType.POINTOFINTEREST, ProgressTracking.Instance.POIVallRandolith, ProgressTracking.Instance.POIVallRandolith.Id, POIRandolithDescriptor, POINote, vesselNameFromNode(ProgressTracking.Instance.POIVallRandolith));
 		}
 
 		private static void loadNextBodyNode(CelestialBodySubtree b)
@@ -256,7 +275,7 @@ namespace ProgressParser
 			if (n == null)
 				return;
 
-			if (intervalNodes.ContainsKey(n.Id))
+			if (intervalNodes.Contains(n.Id))
 				return;
 
 			progressInterval i = null;
@@ -307,7 +326,7 @@ namespace ProgressParser
 			if (n == null)
 				return;
 
-			if (standardNodes.ContainsKey(n.Id))
+			if (standardNodes.Contains(n.Id))
 				return;
 
 			progressStandard s = null;
@@ -354,6 +373,10 @@ namespace ProgressParser
 				s = new progressStandard(null, ProgressType.STUNT, n, d);
 				launchpadLanding = s;
 			}
+			else if (id == ProgressTracking.Instance.launchpadLanding.Id)
+			{
+				s = new progressStandard(null, ProgressType.STUNT, n, d);
+			}
 			else if (id == ProgressTracking.Instance.towerBuzz.Id)
 			{
 				s = new progressStandard(null, ProgressType.STUNT, n, d, note, r);
@@ -368,7 +391,7 @@ namespace ProgressParser
 
 		public static void addPointOfInterest(ProgressNode n, string d, string name, string note, string r = "")
 		{
-			if (pointsOfInterest.ContainsKey(name))
+			if (pointsOfInterest.Contains(name))
 				return;
 
 			progressStandard s = new progressStandard(null, ProgressType.POINTOFINTEREST, n, d, note, r);
@@ -384,7 +407,7 @@ namespace ProgressParser
 			if (body.Body == null)
 				return;
 
-			if (bodySubTrees.ContainsKey(body.Body.theName))
+			if (bodySubTrees.Contains(body.Body.theName))
 				return;			
 
 			bodySubTrees.Add(body.Body.theName, new progressBodyCollection(body));
@@ -415,13 +438,13 @@ namespace ProgressParser
 				else if (t == typeof(ReachSpace))
 					return ((ReachSpace)n).firstVessel;
 				else if (t == typeof(PointOfInterest))
-					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[3].GetValue(n);
+					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
 				else if (t == typeof(TowerBuzz))
 					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[3].GetValue(n);
 			}
 			catch (Exception e)
 			{
-				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Progress Node Vessel Reference\n" + e);
+				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Progress Node [" + t.Name + "] Vessel Reference\n" + e);
 			}			
 
 			return null;
@@ -470,7 +493,7 @@ namespace ProgressParser
 			if (c.Crews.Count <= 0)
 				return "";
 
-			StringBuilder s = new StringBuilder();
+			StringBuilder s = StringBuilderCache.Acquire();
 			
 			for (int i = 0; i < c.Crews.Count; i++)
 			{
@@ -482,7 +505,7 @@ namespace ProgressParser
 					s.Append(", and ");
 			}
 
-			return s.ToString();
+			return s.ToStringAndRelease();
 		}
 
 		public static progressBodyCollection getProgressBody(CelestialBody b)
@@ -490,7 +513,7 @@ namespace ProgressParser
 			if (b == null)
 				return null;
 
-			if (bodySubTrees.ContainsKey(b.theName))
+			if (bodySubTrees.Contains(b.theName))
 				return bodySubTrees[b.theName];
 
 			return null;
@@ -498,7 +521,7 @@ namespace ProgressParser
 
 		public static progressBodyCollection getProgressBody(string bodyName)
 		{
-			if (bodySubTrees.ContainsKey(bodyName))
+			if (bodySubTrees.Contains(bodyName))
 				return bodySubTrees[bodyName];
 
 			return null;
@@ -511,7 +534,7 @@ namespace ProgressParser
 
 		public static progressStandard getPOINode(string name)
 		{
-			if (pointsOfInterest.ContainsKey(name))
+			if (pointsOfInterest.Contains(name))
 				return pointsOfInterest[name];
 
 			return null;
@@ -519,7 +542,7 @@ namespace ProgressParser
 
 		public static progressStandard getStandardNode(string id)
 		{
-			if (standardNodes.ContainsKey(id))
+			if (standardNodes.Contains(id))
 				return standardNodes[id];
 
 			return null;
@@ -527,7 +550,7 @@ namespace ProgressParser
 
 		public static progressInterval getIntervalNode(string id)
 		{
-			if (intervalNodes.ContainsKey(id))
+			if (intervalNodes.Contains(id))
 				return intervalNodes[id];
 
 			return null;

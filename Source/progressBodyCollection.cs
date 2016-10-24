@@ -36,7 +36,7 @@ namespace ProgressParser
 	public class progressBodyCollection
 	{
 		//Store a list of each progress node type; accessible by the progress node ID
-		private Dictionary<string, progressStandard> bodyNodes = new Dictionary<string, progressStandard>();
+		private DictionaryValueList<string, progressStandard> bodyNodes = new DictionaryValueList<string, progressStandard>();
 
 		//Store each body-specific progress node type here
 		private progressStandard flyby;
@@ -103,7 +103,7 @@ namespace ProgressParser
 			if (n == null)
 				return;
 
-			if (bodyNodes.ContainsKey(n.Id))
+			if (bodyNodes.Contains(n.Id))
 				return;
 
 			progressStandard s = null;
@@ -218,7 +218,7 @@ namespace ProgressParser
 
 		public progressStandard getNode(string id)
 		{
-			if (bodyNodes.ContainsKey(id))
+			if (bodyNodes.Contains(id))
 				return bodyNodes[id];
 
 			return null;
