@@ -42,6 +42,7 @@ namespace ProgressParser
 		private string descriptor;
 		private string note;
 		private string noteReference;
+		private string bodyName;
 		private double time;
 
 		private float fundsReward, sciReward, repReward;
@@ -63,6 +64,9 @@ namespace ProgressParser
 			descriptor = s;
 			note = g;
 			noteReference = r;
+
+			if (t == ProgressType.POINTOFINTEREST)
+				bodyName = ((PointOfInterest)n).body;
 
 			try
 			{
@@ -147,6 +151,16 @@ namespace ProgressParser
 		}
 
 		public bool ShowNotes { get; set; }
+		
+		public ProgressType PType
+		{
+			get { return pType; }
+		}
+
+		public string BodyName
+		{
+			get { return bodyName; }
+		}
 
 		public string ID
 		{
