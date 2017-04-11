@@ -39,6 +39,8 @@ namespace ProgressParser
 		private ProgressType pType;
 		private string id;
 		private string descriptor;
+		private string title;
+		private string units;
 
 		private int interval = 1;
 		private int totalIntervals;
@@ -51,12 +53,14 @@ namespace ProgressParser
 
 		public progressInterval() { }
 
-		public progressInterval(ProgressType t, ProgressNode n, double r, double m, double ro, int i, string s = "")
+		public progressInterval(ProgressType t, ProgressNode n, double r, double m, double ro, int i, string s, string l, string u)
 		{
 			pType = t;
 			id = n.Id;
 			totalIntervals = i;
 			descriptor = s;
+			title = l;
+			units = u;
 			currentRecord = r;
 			max = m;
 			round = ro;
@@ -122,6 +126,16 @@ namespace ProgressParser
 		public string Descriptor
 		{
 			get { return descriptor; }
+		}
+
+		public string Title
+		{
+			get { return title; }
+		}
+
+		public string Units
+		{
+			get { return units; }
 		}
 
 		public bool IsReached
@@ -193,7 +207,7 @@ namespace ProgressParser
 			if (rewards.Count > i)
 			{	
 				if (rewards[i].x != 0)
-					return rewards[i].x.ToString("F0");
+					return rewards[i].x.ToString("N0");
 			}
 
 			return "";
@@ -204,7 +218,7 @@ namespace ProgressParser
 			if (rewards.Count > i)
 			{
 				if (rewards[i].y != 0)
-					return rewards[i].y.ToString("F0");
+					return rewards[i].y.ToString("N0");
 			}
 
 			return "";
@@ -215,7 +229,7 @@ namespace ProgressParser
 			if (rewards.Count > i)
 			{
 				if (rewards[i].z != 0)
-					return rewards[i].z.ToString("F0");
+					return rewards[i].z.ToString("N0");
 			}
 
 			return "";
