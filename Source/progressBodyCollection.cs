@@ -75,13 +75,13 @@ namespace ProgressParser
 			}
 			else
 			{
-				addProgressStandard(ProgressType.FLIGHT, b.Body, b.flight, progressParser.flightDescriptor, progressParser.StandardNote, progressParser.vesselNameFromNode(b.flight));
-				addProgressStandard(ProgressType.SUBORBIT, b.Body, b.suborbit, progressParser.suborbitDescriptor, progressParser.StandardNote, progressParser.vesselNameFromNode(b.suborbit));
 				addProgressStandard(ProgressType.FLYBY, b.Body, b.flyBy, progressParser.flybyDescriptor);
 				addProgressStandard(ProgressType.FLYBYRETURN, b.Body, b.returnFromFlyby, progressParser.returnFlybyDescriptor, progressParser.RecoveryNote, progressParser.vesselNameFromNode(b.returnFromFlyby));
 				addProgressStandard(ProgressType.LANDINGRETURN, b.Body, b.returnFromSurface, progressParser.returnLandingDescriptor, progressParser.RecoveryNote, progressParser.vesselNameFromNode(b.returnFromSurface));
 			}
 
+			addProgressStandard(ProgressType.FLIGHT, b.Body, b.flight, progressParser.flightDescriptor, progressParser.StandardNote, progressParser.vesselNameFromNode(b.flight));
+			addProgressStandard(ProgressType.SUBORBIT, b.Body, b.suborbit, progressParser.suborbitDescriptor, progressParser.StandardNote, progressParser.vesselNameFromNode(b.suborbit));
 			addProgressStandard(ProgressType.ESCAPE, b.Body, b.escape, progressParser.escapeDescriptor);
 			addProgressStandard(ProgressType.BASECONSTRUCTION, b.Body, b.baseConstruction, progressParser.baseDescriptor, progressParser.FacilityNote, progressParser.vesselNameFromNode(b.baseConstruction));
 			addProgressStandard(ProgressType.CREWTRANSFER, b.Body, b.crewTransfer, progressParser.crewTransferDescriptor);
