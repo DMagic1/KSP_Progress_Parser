@@ -153,10 +153,10 @@ namespace ProgressParser
 
 		private static void initializeStrings()
 		{
-			altitudeTitle = Localization.Format(altitudeTitle);
-			speedTitle = Localization.Format(speedTitle);
-			depthTitle = Localization.Format(depthTitle);
-			distanceTitle = Localization.Format(distanceTitle);
+			altitudeTitle = Localizer.Format(altitudeTitle);
+			speedTitle = Localizer.Format(speedTitle);
+			depthTitle = Localizer.Format(depthTitle);
+			distanceTitle = Localizer.Format(distanceTitle);
 
 			int colon = distanceTitle.LastIndexOf(':');
 
@@ -166,29 +166,29 @@ namespace ProgressParser
 			if (colon > 0)
 				distanceTitle = distanceTitle.Substring(0, colon);
 
-			POIBopKrakenDescriptor = Localization.Format(POIBopKrakenDescriptor);
-			POIDunaFaceDescriptor = Localization.Format(POIDunaFaceDescriptor);
-			POIDunaMSLDescriptor = Localization.Format(POIDunaMSLDescriptor);
-			POIDunaPyramidDescriptor = Localization.Format(POIDunaPyramidDescriptor);
-			POIKerbinIslandAirfieldDescriptor = Localization.Format(POIKerbinIslandAirfieldDescriptor);
-			POIKerbinKSC2Descriptor = Localization.Format(POIKerbinKSC2Descriptor);
-			POIKerbinMonolith1Descriptor = Localization.Format(POIKerbinMonolith1Descriptor);
-			POIKerbinMonolith2Descriptor = Localization.Format(POIKerbinMonolith2Descriptor);
-			POIKerbinMonolith3Descriptor = Localization.Format(POIKerbinMonolith3Descriptor);
-			POIKerbinPyramidsDescriptor = Localization.Format(POIKerbinPyramidsDescriptor);
-			POIKerbinUFODescriptor = Localization.Format(POIKerbinUFODescriptor);
-			POIMinmusMonolithDescriptor = Localization.Format(POIMinmusMonolithDescriptor);
-			POIMunArmstrongDescriptor = Localization.Format(POIMunArmstrongDescriptor);
-			POIMunMonolith1Descriptor = Localization.Format(POIMunMonolith1Descriptor);
-			POIMunMonolith2Descriptor = Localization.Format(POIMunMonolith2Descriptor);
-			POIMunMonolith3Descriptor = Localization.Format(POIMunMonolith3Descriptor);
-			POIMunRockArch1Descriptor = Localization.Format(POIMunRockArch1Descriptor);
-			POIMunRockArch2Descriptor = Localization.Format(POIMunRockArch2Descriptor);
-			POIMunRockArch3Descriptor = Localization.Format(POIMunRockArch3Descriptor);
-			POIMunUFODescriptor = Localization.Format(POIMunUFODescriptor);
-			POITyloCaveDescriptor = Localization.Format(POITyloCaveDescriptor);
-			POIValIceHengeDescriptor = Localization.Format(POIValIceHengeDescriptor);
-			POIRandolithDescriptor = Localization.Format(POIRandolithDescriptor);
+			POIBopKrakenDescriptor = Localizer.Format(POIBopKrakenDescriptor);
+			POIDunaFaceDescriptor = Localizer.Format(POIDunaFaceDescriptor);
+			POIDunaMSLDescriptor = Localizer.Format(POIDunaMSLDescriptor);
+			POIDunaPyramidDescriptor = Localizer.Format(POIDunaPyramidDescriptor);
+			POIKerbinIslandAirfieldDescriptor = Localizer.Format(POIKerbinIslandAirfieldDescriptor);
+			POIKerbinKSC2Descriptor = Localizer.Format(POIKerbinKSC2Descriptor);
+			POIKerbinMonolith1Descriptor = Localizer.Format(POIKerbinMonolith1Descriptor);
+			POIKerbinMonolith2Descriptor = Localizer.Format(POIKerbinMonolith2Descriptor);
+			POIKerbinMonolith3Descriptor = Localizer.Format(POIKerbinMonolith3Descriptor);
+			POIKerbinPyramidsDescriptor = Localizer.Format(POIKerbinPyramidsDescriptor);
+			POIKerbinUFODescriptor = Localizer.Format(POIKerbinUFODescriptor);
+			POIMinmusMonolithDescriptor = Localizer.Format(POIMinmusMonolithDescriptor);
+			POIMunArmstrongDescriptor = Localizer.Format(POIMunArmstrongDescriptor);
+			POIMunMonolith1Descriptor = Localizer.Format(POIMunMonolith1Descriptor);
+			POIMunMonolith2Descriptor = Localizer.Format(POIMunMonolith2Descriptor);
+			POIMunMonolith3Descriptor = Localizer.Format(POIMunMonolith3Descriptor);
+			POIMunRockArch1Descriptor = Localizer.Format(POIMunRockArch1Descriptor);
+			POIMunRockArch2Descriptor = Localizer.Format(POIMunRockArch2Descriptor);
+			POIMunRockArch3Descriptor = Localizer.Format(POIMunRockArch3Descriptor);
+			POIMunUFODescriptor = Localizer.Format(POIMunUFODescriptor);
+			POITyloCaveDescriptor = Localizer.Format(POITyloCaveDescriptor);
+			POIValIceHengeDescriptor = Localizer.Format(POIValIceHengeDescriptor);
+			POIRandolithDescriptor = Localizer.Format(POIRandolithDescriptor);
 		}
 
 		private static IEnumerator parseProgressTree()
@@ -460,10 +460,10 @@ namespace ProgressParser
 			if (body.Body == null)
 				return;
 
-			if (bodySubTrees.Contains(body.Body.displayName))
-				return;			
+			if (bodySubTrees.Contains(body.Body.displayName.LocalizeBodyName()))
+				return;
 
-			bodySubTrees.Add(body.Body.displayName, new progressBodyCollection(body));
+			bodySubTrees.Add(body.Body.displayName.LocalizeBodyName(), new progressBodyCollection(body));
 		}
 
 		public static VesselRef vesselFromNode(ProgressNode n)
@@ -561,13 +561,18 @@ namespace ProgressParser
 			return s.ToStringAndRelease();
 		}
 
+		public static string LocalizeBodyName(this string input)
+		{
+			return Localizer.Format("<<1>>", input);
+		}
+
 		public static progressBodyCollection getProgressBody(CelestialBody b)
 		{
 			if (b == null)
 				return null;
 
-			if (bodySubTrees.Contains(b.displayName))
-				return bodySubTrees[b.displayName];
+			if (bodySubTrees.Contains(b.displayName.LocalizeBodyName()))
+				return bodySubTrees[b.displayName.LocalizeBodyName()];
 
 			return null;
 		}
