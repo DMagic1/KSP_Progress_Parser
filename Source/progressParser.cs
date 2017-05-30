@@ -33,6 +33,7 @@ using UnityEngine;
 using KSPAchievements;
 using FinePrint;
 using FinePrint.Utilities;
+using KSP.Localization;
 
 namespace ProgressParser
 {
@@ -66,76 +67,128 @@ namespace ProgressParser
 		public static EventVoid onProgressParsed = new EventVoid("onProgressParsed");
 
 		//A series of simple string descriptions for each progress node; the body-specific nodes substitute the body's name for the {0}
-		public const string altitudeDescriptor = "Altitude";
-		public const string speedDescriptor = "Speed";
-		public const string depthDescriptor = "Depth";
-		public const string distanceDescriptor = "Distance";
+		public static string altitudeTitle = "#autoLOC_463493"; // "Altitude";
+		public static string speedTitle = "#autoLOC_900381"; //"Speed";
+		public static string depthTitle = "#autoLOC_ProgressParser_Depth";
+		public static string distanceTitle = "#autoLOC_196906"; //"Distance";  //#autoLOC_196906 = Distance: <<1>>m
 
-		public const string crewRecoveryDescriptor = "Recovered First Crew";
-		public const string firstLaunchDescriptor = "First Launch";
-		public const string reachSpaceDescriptor = "Reached Space";
-		public const string runwayDescriptor = "Landed On The Runway";
-		public const string kscDescriptor = "Landed At The KSC";
-		public const string launchpadDescriptor = "Landed On The Launchpad";
-		public const string towerBuzzDescriptor = "Buzzed The Tower";
+		public static string altitudeDescriptor = "#autoLOC_297833";
+		public static string speedDescriptor = "#autoLOC_298174";
+		public static string depthDescriptor = "#autoLOC_297943";
+		public static string distanceDescriptor = "#autoLOC_298052";
 
-		public const string flybyDescriptor = "Conducted A Fly By Of {0}";
-		public const string orbitDescriptor = "Entered Orbit Around {0}";
-		public const string landingDescriptor = "Landed On {0}";
-		public const string escapeDescriptor = "Escaped {0}'s Gravity";
-		public const string scienceDescriptor = "Collected Science From {0}";
-		public const string flightDescriptor = "Flew In {0}'s Atmosphere";
-		public const string returnLandingDescriptor = "Returned From The Surface Of {0}";
-		public const string returnFlybyDescriptor = "Returned After A Fly By Of {0}";
-		public const string returnOrbitDescriptor = "Returned From Orbit Around {0}";
-		public const string splashdownDescriptor = "Splashed Down On {0}";
-		public const string suborbitDescriptor = "Entered A Sub-Orbital Trajectory At {0}";
-		public const string crewTransferDescriptor = "Transferred Crew At {0}";
-		public const string dockingDescriptor = "Perfomed A Docking At {0}";
-		public const string flagDescriptor = "Planted A Flag On {0}";
-		public const string spacewalkDescriptor = "Conducted A Space Walk At {0}";
-		public const string EVADescriptor = "Performed A Surface EVA On {0}";
-		public const string stationDescriptor = "Construced A Space Station At {0}";
-		public const string baseDescriptor = "Escaped {0}'s Gravity";
-		public const string rendezvousDescriptor = "Performed A Rendezvous At {0}";
+		public static string altitudeUnits = "m";
+		public static string speedUnits = "m/s";
+		public static string depthUnits = "m";
+		public static string distanceUnits = "m";
 
-		public const string POIBopKrakenDescriptor = "Dead Kraken on Bop";
-		public const string POIDunaFaceDescriptor = "Duna Face";
-		public const string POIDunaMSLDescriptor = "Duna MSL";
-		public const string POIDunaPyramidDescriptor = "Duna Pyramid";
-		public const string POIKerbinIslandAirfieldDescriptor = "Island Airfield";
-		public const string POIKerbinKSC2Descriptor = "KSC 2";
-		public const string POIKerbinMonolith1Descriptor = "Kerbin Monolith 1";
-		public const string POIKerbinMonolith2Descriptor = "Kerbin Monolith 2";
-		public const string POIKerbinMonolith3Descriptor = "Kerbin Monolith 3";
-		public const string POIKerbinPyramidsDescriptor = "Kerbin Pyramids";
-		public const string POIKerbinUFODescriptor = "Kerbin UFO";
-		public const string POIMinmusMonolithDescriptor = "Minmus Monolith";
-		public const string POIMunArmstrongDescriptor = "Neil Armstrong Memorial on the Mun";
-		public const string POIMunMonolith1Descriptor = "Mun Monolith 1";
-		public const string POIMunMonolith2Descriptor = "Mun Monolith 2";
-		public const string POIMunMonolith3Descriptor = "Mun Monolith 3";
-		public const string POIMunRockArch1Descriptor = "Mun Rock Arch 1";
-		public const string POIMunRockArch2Descriptor = "Mun Rock Arch 2";
-		public const string POIMunRockArch3Descriptor = "Mun Rock Arch 3";
-		public const string POIMunUFODescriptor = "Mun UFO";
-		public const string POITyloCaveDescriptor = "Cave on Tylo";
-		public const string POIValIceHengeDescriptor = "Vall Ice Henge";
-		public const string POIRandolithDescriptor = "{0} Randolith";
+		public static string crewRecoveryDescriptor = "#autoLOC_296238"; // = We have recovered our first crew from a mission. "Recovered First Crew";
+		public static string firstLaunchDescriptor = "#autoLOC_296348"; // = We have launched our first vessel. "First Launch";
+		public static string reachSpaceDescriptor = "#autoLOC_297725"; //= We have reached space. "Reached Space";
+		public static string runwayDescriptor = "";  //"Landed On The Runway";
+		public static string kscDescriptor = ""; //"Landed At The KSC";
+		public static string launchpadDescriptor = ""; // "Landed On The Launchpad";
+		public static string towerBuzzDescriptor = "#autoLOC_298640"; //= You have buzzed the tower at the space center! "Buzzed The Tower";
+
+		public static string flybyDescriptor = "#autoLOC_295360"; //  = We have initiated the first fly by of <<1>>.. "Conducted A Fly By Of {0}";
+		public static string orbitDescriptor = "#autoLOC_6001940"; // We have entered orbit of <<1>>."Entered Orbit Around {0}";
+		public static string landingDescriptor = "#autoLOC_6001944";  // We have landed on the surface of <<1>>."Landed On {0}";
+		public static string escapeDescriptor = "#autoLOC_295242";// = We have escaped the gravitational influence of <<1>>. "Escaped {0}'s Gravity";
+		public static string scienceDescriptor = "#autoLOC_6001950"; // We have gathered the first scientific data from <<1>>."Collected Science From {0}";
+		public static string flightDescriptor = "#autoLOC_6001938"; //  We have entered into atmospheric flight above <<1>>."Flew In {0}'s Atmosphere";
+		public static string returnLandingDescriptor = "#autoLOC_295693";// = We have returned home from the surface of <<1>>."Returned From The Surface Of {0}";
+		public static string returnFlybyDescriptor = "#autoLOC_295665";// = We have returned home from a fly by of <<1>>."Returned After A Fly By Of {0}";
+		public static string returnOrbitDescriptor = "#autoLOC_300432"; //= Recovery of a vessel returned from <<1>> orbit "Returned From Orbit Around {0}";
+		public static string splashdownDescriptor = "#autoLOC_6001946"; //We have splashed down in the oceans of <<1>>. "Splashed Down On {0}";
+		public static string suborbitDescriptor = "#autoLOC_6001942"; //We have entered into suborbital spaceflight above <<1>>. "Entered A Sub-Orbital Trajectory At {0}";
+		public static string crewTransferDescriptor = "#autoLOC_296191";// = We have performed a crew transfer near <<1>>."Transferred Crew At {0}";
+		public static string dockingDescriptor = "#autoLOC_296294";// = We have performed a docking maneuver on <<1>>. "Perfomed A Docking At {0}";
+		public static string flagDescriptor = "#autoLOC_6001954"; //We have planted a flag on <<1>>. "Planted A Flag On {0}";
+		public static string spacewalkDescriptor = "#autoLOC_298311";// = We have performed a spacewalk in orbit of <<1>>. "Conducted A Space Walk At {0}";
+		public static string EVADescriptor = "#autoLOC_6001956"; //We have walked on the surface of <<1>>. "Performed A Surface EVA On {0}";
+		public static string stationDescriptor = "#autoLOC_298375";// = We have started staticructing the first station around <<1>>. "staticruced A Space Station At {0}";
+		public static string baseDescriptor = "#autoLOC_295188";// = We have started staticructing the first outpost on <<1>>.
+		public static string rendezvousDescriptor = "#autoLOC_298266";// = We have performed a rendezvous maneuver around <<1>>. "Performed A Rendezvous At {0}";
+
+		public static string POIBopKrakenDescriptor = "#autoLOC_297154";
+		public static string POIDunaFaceDescriptor = "#autoLOC_297150";
+		public static string POIDunaMSLDescriptor = "#autoLOC_297149";
+		public static string POIDunaPyramidDescriptor = "#autoLOC_297148";
+		public static string POIKerbinIslandAirfieldDescriptor = "#autoLOC_297134";
+		public static string POIKerbinKSC2Descriptor = "#autoLOC_297133";
+		public static string POIKerbinMonolith1Descriptor = "#autoLOC_297137";
+		public static string POIKerbinMonolith2Descriptor = "#autoLOC_297138";
+		public static string POIKerbinMonolith3Descriptor = "#autoLOC_297139";
+		public static string POIKerbinPyramidsDescriptor = "#autoLOC_297136";
+		public static string POIKerbinUFODescriptor = "#autoLOC_297135";
+		public static string POIMinmusMonolithDescriptor = "#autoLOC_297151";
+		public static string POIMunArmstrongDescriptor = "#autoLOC_297140";
+		public static string POIMunMonolith1Descriptor = "#autoLOC_297145";
+		public static string POIMunMonolith2Descriptor = "#autoLOC_297146";
+		public static string POIMunMonolith3Descriptor = "#autoLOC_297147";
+		public static string POIMunRockArch1Descriptor = "#autoLOC_297142";
+		public static string POIMunRockArch2Descriptor = "#autoLOC_297143";
+		public static string POIMunRockArch3Descriptor = "#autoLOC_297144";
+		public static string POIMunUFODescriptor = "#autoLOC_297141";
+		public static string POITyloCaveDescriptor = "#autoLOC_297152";
+		public static string POIValIceHengeDescriptor = "#autoLOC_297153";
+		public static string POIRandolithDescriptor = "#autoLOC_297156";
 
 		//Notes for completed progress nodes where available; the {0} is replaced by the vessel or crew involved; the {1} is replaced by the date of completion
-		public const string StandardNote = "Completed By {0} On {1}";
-		public const string CrewNote = "Performed By {0} On {1}";
-		public const string RecoveryNote = "Recovered {0} On {1}";
-		public const string FlagNote = "Planted By {0} On {1}";
-		public const string FacilityNote = "Constructed {0} On {1}";
-		public const string POINote = "Discovered By {0} On {1}";
+		public static string StandardNote = "#autoLOC_ProgressParser_StandardNote";
+		public static string CrewNote = "#autoLOC_ProgressParser_CrewNote";
+		public static string RecoveryNote = "#autoLOC_ProgressParser_RecoveryNote";
+		public static string FlagNote = "#autoLOC_ProgressParser_FlagNote";
+		public static string FacilityNote = "#autoLOC_ProgressParser_FacilityNote";
+		public static string POINote = "#autoLOC_ProgressParser_POINote";
 
 		private static bool loaded;
 
 		public static void initialize()
 		{
+			initializeStrings();
+
 			progressController.instance.StartCoroutine(parseProgressTree());
+		}
+
+		private static void initializeStrings()
+		{
+			altitudeTitle = Localizer.Format(altitudeTitle);
+			speedTitle = Localizer.Format(speedTitle);
+			depthTitle = Localizer.Format(depthTitle);
+			distanceTitle = Localizer.Format(distanceTitle);
+
+			int colon = distanceTitle.LastIndexOf(':');
+
+			if (colon == -1)
+				colon = distanceTitle.LastIndexOf('：');
+
+			if (colon > 0)
+				distanceTitle = distanceTitle.Substring(0, colon);
+
+			POIBopKrakenDescriptor = Localizer.Format(POIBopKrakenDescriptor);
+			POIDunaFaceDescriptor = Localizer.Format(POIDunaFaceDescriptor);
+			POIDunaMSLDescriptor = Localizer.Format(POIDunaMSLDescriptor);
+			POIDunaPyramidDescriptor = Localizer.Format(POIDunaPyramidDescriptor);
+			POIKerbinIslandAirfieldDescriptor = Localizer.Format(POIKerbinIslandAirfieldDescriptor);
+			POIKerbinKSC2Descriptor = Localizer.Format(POIKerbinKSC2Descriptor);
+			POIKerbinMonolith1Descriptor = Localizer.Format(POIKerbinMonolith1Descriptor);
+			POIKerbinMonolith2Descriptor = Localizer.Format(POIKerbinMonolith2Descriptor);
+			POIKerbinMonolith3Descriptor = Localizer.Format(POIKerbinMonolith3Descriptor);
+			POIKerbinPyramidsDescriptor = Localizer.Format(POIKerbinPyramidsDescriptor);
+			POIKerbinUFODescriptor = Localizer.Format(POIKerbinUFODescriptor);
+			POIMinmusMonolithDescriptor = Localizer.Format(POIMinmusMonolithDescriptor);
+			POIMunArmstrongDescriptor = Localizer.Format(POIMunArmstrongDescriptor);
+			POIMunMonolith1Descriptor = Localizer.Format(POIMunMonolith1Descriptor);
+			POIMunMonolith2Descriptor = Localizer.Format(POIMunMonolith2Descriptor);
+			POIMunMonolith3Descriptor = Localizer.Format(POIMunMonolith3Descriptor);
+			POIMunRockArch1Descriptor = Localizer.Format(POIMunRockArch1Descriptor);
+			POIMunRockArch2Descriptor = Localizer.Format(POIMunRockArch2Descriptor);
+			POIMunRockArch3Descriptor = Localizer.Format(POIMunRockArch3Descriptor);
+			POIMunUFODescriptor = Localizer.Format(POIMunUFODescriptor);
+			POITyloCaveDescriptor = Localizer.Format(POITyloCaveDescriptor);
+			POIValIceHengeDescriptor = Localizer.Format(POIValIceHengeDescriptor);
+			POIRandolithDescriptor = Localizer.Format(POIRandolithDescriptor);
 		}
 
 		private static IEnumerator parseProgressTree()
@@ -190,10 +243,10 @@ namespace ProgressParser
 
 		private static void loadIntervalNodes()
 		{
-			addProgressInterval(ProgressType.ALTITUDERECORD, ProgressTracking.Instance.altitudeRecords, altitudeDescriptor);
-			addProgressInterval(ProgressType.SPEEDRECORD, ProgressTracking.Instance.speedRecords, speedDescriptor);
-			addProgressInterval(ProgressType.DISTANCERECORD, ProgressTracking.Instance.distanceRecords, distanceDescriptor);
-			addProgressInterval(ProgressType.DEPTHRECORD, ProgressTracking.Instance.depthRecords, depthDescriptor);
+			addProgressInterval(ProgressType.ALTITUDERECORD, ProgressTracking.Instance.altitudeRecords, altitudeDescriptor, altitudeTitle, altitudeUnits);
+			addProgressInterval(ProgressType.SPEEDRECORD, ProgressTracking.Instance.speedRecords, speedDescriptor, speedTitle, speedUnits);
+			addProgressInterval(ProgressType.DISTANCERECORD, ProgressTracking.Instance.distanceRecords, distanceDescriptor, distanceTitle, distanceUnits);
+			addProgressInterval(ProgressType.DEPTHRECORD, ProgressTracking.Instance.depthRecords, depthDescriptor, depthTitle, depthUnits);
 		}
 
 		private static void loadStandardNodes()
@@ -270,7 +323,7 @@ namespace ProgressParser
 			anyBody = bodySubTrees.Values.Any(n => n.IsReached);
 		}
 
-		private static void addProgressInterval(ProgressType p, ProgressNode n, string d = "")
+		private static void addProgressInterval(ProgressType p, ProgressNode n, string d, string t, string u)
 		{
 			if (n == null)
 				return;
@@ -283,19 +336,19 @@ namespace ProgressParser
 			switch (p)
 			{
 				case ProgressType.ALTITUDERECORD:
-					i = new progressInterval(ProgressType.ALTITUDERECORD, n, ((RecordsAltitude)n).record, getMaxAltitudeRecord, 500, ContractDefs.Progression.RecordSplit, d);
+					i = new progressInterval(ProgressType.ALTITUDERECORD, n, ((RecordsAltitude)n).record, getMaxAltitudeRecord, 500, ContractDefs.Progression.RecordSplit, d, t, u);
 					altitude = i;
 					break;
 				case ProgressType.DEPTHRECORD:
-					i = new progressInterval(ProgressType.DEPTHRECORD, n, ((RecordsDepth)n).record, ContractDefs.Progression.MaxDepthRecord, 10, ContractDefs.Progression.RecordSplit, d);
+					i = new progressInterval(ProgressType.DEPTHRECORD, n, ((RecordsDepth)n).record, ContractDefs.Progression.MaxDepthRecord, 10, ContractDefs.Progression.RecordSplit, d, t, u);
 					depth = i;
 					break;
 				case ProgressType.DISTANCERECORD:
-					i = new progressInterval(ProgressType.DISTANCERECORD, n, ((RecordsDistance)n).record, ContractDefs.Progression.MaxDistanceRecord, 1000, ContractDefs.Progression.RecordSplit, d);
+					i = new progressInterval(ProgressType.DISTANCERECORD, n, ((RecordsDistance)n).record, ContractDefs.Progression.MaxDistanceRecord, 1000, ContractDefs.Progression.RecordSplit, d, t, u);
 					distance = i;
 					break;
 				case ProgressType.SPEEDRECORD:
-					i = new progressInterval(ProgressType.SPEEDRECORD, n, ((RecordsSpeed)n).record, ContractDefs.Progression.MaxSpeedRecord, 5, ContractDefs.Progression.RecordSplit, d);
+					i = new progressInterval(ProgressType.SPEEDRECORD, n, ((RecordsSpeed)n).record, ContractDefs.Progression.MaxSpeedRecord, 5, ContractDefs.Progression.RecordSplit, d, t, u);
 					speed = i;
 					break;
 				default:
@@ -407,10 +460,10 @@ namespace ProgressParser
 			if (body.Body == null)
 				return;
 
-			if (bodySubTrees.Contains(body.Body.theName))
-				return;			
+			if (bodySubTrees.Contains(body.Body.displayName.LocalizeBodyName()))
+				return;
 
-			bodySubTrees.Add(body.Body.theName, new progressBodyCollection(body));
+			bodySubTrees.Add(body.Body.displayName.LocalizeBodyName(), new progressBodyCollection(body));
 		}
 
 		public static VesselRef vesselFromNode(ProgressNode n)
@@ -508,13 +561,18 @@ namespace ProgressParser
 			return s.ToStringAndRelease();
 		}
 
+		public static string LocalizeBodyName(this string input)
+		{
+			return Localizer.Format("<<1>>", input);
+		}
+
 		public static progressBodyCollection getProgressBody(CelestialBody b)
 		{
 			if (b == null)
 				return null;
 
-			if (bodySubTrees.Contains(b.theName))
-				return bodySubTrees[b.theName];
+			if (bodySubTrees.Contains(b.displayName.LocalizeBodyName()))
+				return bodySubTrees[b.displayName.LocalizeBodyName()];
 
 			return null;
 		}

@@ -66,7 +66,20 @@ namespace ProgressParser
 			noteReference = r;
 
 			if (t == ProgressType.POINTOFINTEREST)
-				bodyName = ((PointOfInterest)n).body;
+			{
+				string bodyN = ((PointOfInterest)n).body;
+
+				for (int i = FlightGlobals.Bodies.Count - 1; i >= 0; i--)
+				{
+					CelestialBody bod = FlightGlobals.Bodies[i];
+
+					if (bod.bodyName != bodyN)
+						continue;
+
+					bodyName = bod.displayName.LocalizeBodyName();
+					break;
+				}
+			}
 
 			try
 			{
@@ -93,17 +106,17 @@ namespace ProgressParser
 			repReward = ProgressUtilities.WorldFirstStandardReward(ProgressRewardType.PROGRESS, Currency.Reputation, pType, body);
 
 			if (fundsReward != 0)
-				fundsRewardString = fundsReward.ToString("F0");
+				fundsRewardString = fundsReward.ToString("N0");
 			else
 				fundsRewardString = "";
 
 			if (sciReward != 0)
-				sciRewardString = sciReward.ToString("F0");
+				sciRewardString = sciReward.ToString("N0");
 			else
 				sciRewardString = "";
 
 			if (repReward != 0)
-				repRewardString = repReward.ToString("F0");
+				repRewardString = repReward.ToString("N0");
 			else
 				repRewardString = "";
 		}
