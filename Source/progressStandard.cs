@@ -76,7 +76,7 @@ namespace ProgressParser
 					if (bod.bodyName != bodyN)
 						continue;
 
-					bodyName = bod.displayName;
+					bodyName = bod.displayName.LocalizeBodyName();
 					break;
 				}
 			}
