@@ -1,0 +1,112 @@
+﻿KSP Progress Events
+
+	There are three separate progress events, Reached, Completed, and Achieved.
+
+	* Reach is for when you first access a set of progress nodes, like the first speed
+	  achievement, or the first node for a celestial body.
+
+	* Complete is for any progress node on the first time you complete it, so the first
+	  time you orbit around a specific planet, or the first time you plant a flag.
+
+	* Achieve is fired any time you finish a progress node (Not sure if it fires if it has
+	  been done before; you won't get any rewards or messages for this)
+
+	To figure out the type of achievement for any of those events you'll need to take the
+	ProgressNode class returned and figure out which one of its derivative classes it belongs
+	to; each node has a string ID that can be used to tie it to its derivative class.
+
+
+
+	ProgressParser does that a lot, just manually assigning strings for each node type,
+	that's part of why it's so tedious. I think each progress node should have it's associated
+	message stored.
+
+To go over it a little more:
+
+	There are a few things about progress nodes worth knowing.
+
+	KSP initializes all of the progress nodes whenever a scene loads, then it parses the
+	save file to see which are completed, or what state they are in. After this happens is when
+	Progress Parser loads everything.
+
+	The descriptions for all of the different nodes are manually loaded (you can't use the
+	localizer method in a field initialization, so the localization tags have to be processed
+	at some point), using strings from the localization file (most are in the same place in the
+	file, and are pretty obvious).
+
+	There are two basic types of nodes, interval nodes for the things like speed, altitude,
+	etc... records, where one node stores each of the threshold values and their completion
+	state. And the standard nodes, there are the basic ones like first launch or reach space,
+	then the POI nodes for anomalies, then a set of nodes for each celestial body, like orbit,
+	land, plant a flag, etc... (with a slightly different set for the home planet).
+
+	All of Progress Parser's info on nodes can be accessed through various methods and
+	properties found at the bottom of the ProgressParser static class.
+
+	For the standard nodes the completion message can be accessed using the
+	ProgressStandard.Descriptor string. Some of them require the name of the celestial body,
+	and the POI nodes require some different handling, Contracts Window Plus has an example of
+	how they should be used to actually display the string.
+
+	For the interval nodes you have to get how many intervals are available and which have
+	been completed, along with the message string and the actual value and units for each
+	interval (like 200m/s, 500m/s 1000m/s, etc for the speed rewards).
+
+	Progress Parser updates all of its values for interval nodes every time one of the
+	Progress Node events (reach, achieved, or completed) is fired. For the standard nodes they
+	are only updated when the OnComplete event is fired (since the reach and achieve events
+	don't really apply to these).
+
+	It's all loaded on a scene change, so all you need to check when an event fires is
+	whether or not a certain progress node is actually finished. The event fires after the
+	node is processed, so everything should be up to date by the time Progress Parser gets to
+	it.
+
+
+Public methods in the progressController class
+
+	public static double getIntervalRecord(ProgressNode n)
+	public static bool isIntervalType(ProgressNode n)
+	public static bool isPOI(ProgressNode n)
+	public static CelestialBody getBodyFromType(ProgressNode n)
+
+	public static double getIntervalRecord(ProgressNode n)
+	public static double getIntervalRecord(ProgressNode n, ref string descr)
+
+
+Public methods in the progressParser class
+
+	public static void updateCompletionRecord()
+	public static void addStunt(ProgressNode n, string d, string id, string note, string r = "")
+	public static void addPointOfInterest(ProgressNode n, string d, string name, string note, string r = "")
+	public static void addBodySubTree(CelestialBodySubtree body)
+	public static VesselRef vesselFromNode(ProgressNode n)
+	public static string vesselNameFromNode(ProgressNode n)
+	public static CrewRef crewFromNode(ProgressNode n)
+	public static string crewNameFromNode(ProgressNode n)
+	public static string LocalizeBodyName(this string input)
+	public static progressBodyCollection getProgressBody(CelestialBody b)
+	public static progressBodyCollection getProgressBody(string bodyName)
+	public static List<progressBodyCollection> getAllBodyNodes
+	public static progressStandard getPOINode(string name)
+	public static progressStandard getStandardNode(string id)
+	public static progressInterval getIntervalNode(string id)
+	public static List<progressStandard> getAllPOINodes
+	public static List<progressStandard> getAllStandardNodes
+	public static List<progressInterval> getAllIntervalNodes
+
+	public static bool AnyInterval
+	public static bool AnyStandard
+	public static bool AnyPOI
+	public static bool AnyBody
+	public static bool Loaded
+	public static progressInterval Altitude
+	public static progressInterval Depth
+	public static progressInterval Distance
+	public static progressInterval Speed
+	public static progressStandard CrewRecovery
+	public static progressStandard FirstLaunch
+	public static progressStandard ReachSpace
+	public static progressStandard RunwayLanding
+	public static progressStandard LaunchpadLanding
+	public static progressStandard TowerBuzz
