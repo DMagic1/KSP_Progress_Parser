@@ -131,23 +131,41 @@ namespace ProgressParser
 			progressParser.updateCompletionRecord();
 		}
 
-		private double getIntervalRecord(ProgressNode n)
+		public static double getIntervalRecord(ProgressNode n)
 		{
-			Type t = n.GetType();
-
-			if (t == typeof(RecordsAltitude))
-				return ((RecordsAltitude)n).record;
-			else if (t == typeof(RecordsDepth))
-				return ((RecordsDepth)n).record;
-			else if (t == typeof(RecordsDistance))
-				return ((RecordsDistance)n).record;
-			else if (t == typeof(RecordsSpeed))
-				return ((RecordsSpeed)n).record;
-
-			return 0;
+            string descr = "";
+            return getIntervalRecord(n, ref descr);
 		}
 
-		private void onComplete(ProgressNode node)
+        public static double getIntervalRecord(ProgressNode n, ref string descr)
+        {
+            Type t = n.GetType();
+
+            if (t == typeof(RecordsAltitude))
+            {
+                descr = progressParser.altitudeTitle;
+                return ((RecordsAltitude)n).record;
+            }
+            else if (t == typeof(RecordsDepth))
+            {
+                descr = progressParser.depthTitle;
+                return ((RecordsDepth)n).record;
+            }
+            else if (t == typeof(RecordsDistance))
+            {
+                descr = progressParser.distanceTitle;
+                return ((RecordsDistance)n).record;
+            }
+            else if (t == typeof(RecordsSpeed))
+            {
+                descr = progressParser.speedTitle;
+                return ((RecordsSpeed)n).record;
+            }
+            descr = "";
+            return 0;
+        }
+
+        private void onComplete(ProgressNode node)
 		{
 			if (node == null)
 				return;
@@ -268,7 +286,7 @@ namespace ProgressParser
 			progressParser.updateCompletionRecord();
 		}
 
-		private bool isIntervalType(ProgressNode n)
+		public static bool isIntervalType(ProgressNode n)
 		{
 			Type t = n.GetType();
 
@@ -284,7 +302,7 @@ namespace ProgressParser
 			return false;
 		}
 
-		private bool isPOI(ProgressNode n)
+		public static bool isPOI(ProgressNode n)
 		{
 			if (n.GetType() == typeof(PointOfInterest))
 				return true;
@@ -292,7 +310,7 @@ namespace ProgressParser
 			return false;
 		}
 
-		private CelestialBody getBodyFromType(ProgressNode n)
+		public static CelestialBody getBodyFromType(ProgressNode n)
 		{
 			Type t = n.GetType();
 
