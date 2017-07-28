@@ -82,13 +82,13 @@ namespace ProgressParser
 			if (node == null)
 				return;
 
-			if (isIntervalType(node))
+			if (progressParser.isIntervalType(node))
 			{
 				progressInterval i = progressParser.getIntervalNode(node.Id);
 
 				if (i != null)
 				{
-					double nodeRecord = getIntervalRecord(node);
+					double nodeRecord = progressParser.getIntervalRecord(node);
 
 					if (i.getRecord(i.Interval) >= nodeRecord)
 						return;
@@ -109,13 +109,13 @@ namespace ProgressParser
 			if (node == null)
 				return;
 
-			if (isIntervalType(node))
+			if (progressParser.isIntervalType(node))
 			{
 				progressInterval i = progressParser.getIntervalNode(node.Id);
 
 				if (i != null)
 				{
-					double nodeRecord = getIntervalRecord(node);
+					double nodeRecord = progressParser.getIntervalRecord(node);
 
 					if (i.getRecord(i.Interval) >= nodeRecord)
 						return;
@@ -131,40 +131,6 @@ namespace ProgressParser
 			progressParser.updateCompletionRecord();
 		}
 
-		public static double getIntervalRecord(ProgressNode n)
-		{
-            string descr = "";
-            return getIntervalRecord(n, ref descr);
-		}
-
-        public static double getIntervalRecord(ProgressNode n, ref string descr)
-        {
-            Type t = n.GetType();
-
-            if (t == typeof(RecordsAltitude))
-            {
-                descr = progressParser.altitudeTitle;
-                return ((RecordsAltitude)n).record;
-            }
-            else if (t == typeof(RecordsDepth))
-            {
-                descr = progressParser.depthTitle;
-                return ((RecordsDepth)n).record;
-            }
-            else if (t == typeof(RecordsDistance))
-            {
-                descr = progressParser.distanceTitle;
-                return ((RecordsDistance)n).record;
-            }
-            else if (t == typeof(RecordsSpeed))
-            {
-                descr = progressParser.speedTitle;
-                return ((RecordsSpeed)n).record;
-            }
-            descr = "";
-            return 0;
-        }
-
         private void onComplete(ProgressNode node)
 		{
 			if (node == null)
@@ -173,9 +139,9 @@ namespace ProgressParser
 			if (!node.IsComplete)
 				return;
 
-			if (!isIntervalType(node))
+			if (!progressParser.isIntervalType(node))
 			{
-				if (isPOI(node))
+				if (progressParser.isPOI(node))
 				{
 					progressStandard s = progressParser.getPOINode(node.Id);
 
@@ -223,7 +189,7 @@ namespace ProgressParser
 					}
 					else
 					{
-						CelestialBody body = getBodyFromType(node);
+						CelestialBody body = progressParser.getBodyFromType(node);
 
 						if (body == null)
 						{
@@ -284,79 +250,6 @@ namespace ProgressParser
 			}
 
 			progressParser.updateCompletionRecord();
-		}
-
-		public static bool isIntervalType(ProgressNode n)
-		{
-			Type t = n.GetType();
-
-			if (t == typeof(RecordsAltitude))
-				return true;
-			else if (t == typeof(RecordsDepth))
-				return true;
-			else if (t == typeof(RecordsDistance))
-				return true;
-			else if (t == typeof(RecordsSpeed))
-				return true;
-
-			return false;
-		}
-
-		public static bool isPOI(ProgressNode n)
-		{
-			if (n.GetType() == typeof(PointOfInterest))
-				return true;
-
-			return false;
-		}
-
-		public static CelestialBody getBodyFromType(ProgressNode n)
-		{
-			Type t = n.GetType();
-
-			try
-			{
-				if (t == typeof(BaseConstruction))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(CelestialBodyEscape))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(CelestialBodyFlight))
-					return ((CelestialBodyFlight)n).body;
-				else if (t == typeof(CelestialBodyFlyby))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(CelestialBodyLanding))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(CelestialBodyOrbit))
-					return ((CelestialBodyOrbit)n).body;
-				else if (t == typeof(CelestialBodySuborbit))
-					return ((CelestialBodySuborbit)n).body;
-				else if (t == typeof(CelestialBodyReturn))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(CelestialBodyScience))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(CelestialBodySplashdown))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(CelestialBodyTransfer))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(Docking))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(FlagPlant))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(Rendezvous))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(Spacewalk))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(StationConstruction))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(SurfaceEVA))
-					return (CelestialBody)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-			}
-			catch (Exception e)
-			{
-				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Progress Node Celestial Body Reference\n" + e);
-			}
-
-			return null;
 		}
 
 	}
