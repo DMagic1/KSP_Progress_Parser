@@ -472,28 +472,28 @@ namespace ProgressParser
 
 			try
 			{
-				if (t == typeof(BaseConstruction))
-					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
-				else if (t == typeof(CelestialBodyFlight))
-					return ((CelestialBodyFlight)n).firstVessel;
-				else if (t == typeof(CelestialBodyLanding))
-					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
-				else if (t == typeof(CelestialBodyOrbit))
-					return ((CelestialBodyOrbit)n).firstVessel;
-				else if (t == typeof(CelestialBodySuborbit))
-					return ((CelestialBodySuborbit)n).firstVessel;
-				else if (t == typeof(CelestialBodyReturn))
-					return ((CelestialBodyReturn)n).firstVessel;
-				else if (t == typeof(CelestialBodyScience))
-					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
-				else if (t == typeof(StationConstruction))
-					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
-				else if (t == typeof(ReachSpace))
-					return ((ReachSpace)n).firstVessel;
-				else if (t == typeof(PointOfInterest))
-					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[0].GetValue(n);
-				else if (t == typeof(TowerBuzz))
-					return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[3].GetValue(n);
+                if (t == typeof(BaseConstruction))
+                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
+                else if (t == typeof(CelestialBodyFlight))
+                    return ((CelestialBodyFlight)n).firstVessel;
+                else if (t == typeof(CelestialBodyLanding))
+                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
+                else if (t == typeof(CelestialBodyOrbit))
+                    return ((CelestialBodyOrbit)n).firstVessel;
+                else if (t == typeof(CelestialBodySuborbit))
+                    return ((CelestialBodySuborbit)n).firstVessel;
+                else if (t == typeof(CelestialBodyReturn))
+                    return ((CelestialBodyReturn)n).firstVessel;
+                else if (t == typeof(CelestialBodyScience))
+                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
+                else if (t == typeof(StationConstruction))
+                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[1].GetValue(n);
+                else if (t == typeof(ReachSpace))
+                    return ((ReachSpace)n).firstVessel;
+                else if (t == typeof(PointOfInterest))
+                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[4].GetValue(n);
+                else if (t == typeof(TowerBuzz))
+                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[3].GetValue(n);
 			}
 			catch (Exception e)
 			{
@@ -530,7 +530,7 @@ namespace ProgressParser
 			}
 			catch (Exception e)
 			{
-				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Progress Node Crew Reference\n" + e);
+				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Progress Node [" + t.Name + "] Crew Reference\n" + e);
 			}
 
 			return null;
@@ -662,7 +662,7 @@ namespace ProgressParser
 			}
 			catch (Exception e)
 			{
-				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Progress Node Celestial Body Reference\n" + e);
+				Debug.LogWarning("[Progress Tracking Parser] Error In Finding Progress Node [" + t.Name + "] Celestial Body Reference\n" + e);
 			}
 
 			return null;
