@@ -56,26 +56,34 @@ namespace ProgressParser
 			GameEvents.OnProgressComplete.Add(onComplete);
 		}
 
-		private void onSceneChange(GameScenes g)
-		{
-			switch (g)
-			{
-				case GameScenes.LOADING:
-				case GameScenes.CREDITS:
-				case GameScenes.LOADINGBUFFER:
-				case GameScenes.MAINMENU:
-				case GameScenes.PSYSTEM:
-				case GameScenes.SETTINGS:
-				case GameScenes.EDITOR:
-					return;
-			}
+        private void onSceneChange(GameScenes g)
+        {
+            switch (g)
+            {
+                case GameScenes.LOADING:
+                case GameScenes.LOADINGBUFFER:
+                case GameScenes.MAINMENU:
+                case GameScenes.SETTINGS:
+                case GameScenes.CREDITS:
+                case GameScenes.PSYSTEM:
+                case GameScenes.MISSIONBUILDER:
+                    return;
+                case GameScenes.EDITOR:
+                    progressParser.Loaded = false;
 
-			progressParser.Loaded = false;
+                    Debug.Log("[Progress Tracking Parser] Initializing Progress Parser For Editor...");
 
-			Debug.Log("[Progress Tracking Parser] Initializing Progress Parser...");
+                    progressParser.editorInitialize();
+                    return;
+                default:
+                    progressParser.Loaded = false;
 
-			progressParser.initialize();
-		}
+                    Debug.Log("[Progress Tracking Parser] Initializing Progress Parser...");
+
+                    progressParser.initialize();
+                    return;
+            }
+        }
 
 		private void onReach(ProgressNode node)
 		{

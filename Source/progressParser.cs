@@ -144,12 +144,20 @@ namespace ProgressParser
 
 		private static bool loaded;
 
+        private static bool stringsLoaded;
+
 		public static void initialize()
 		{
-			initializeStrings();
+            if (!stringsLoaded)
+    			initializeStrings();
 
 			progressController.instance.StartCoroutine(parseProgressTree());
 		}
+
+        public static void editorInitialize()
+        {
+            progressController.instance.StartCoroutine(editorParseDelay());
+        }
 
 		private static void initializeStrings()
 		{
@@ -189,6 +197,8 @@ namespace ProgressParser
 			POITyloCaveDescriptor = Localizer.Format(POITyloCaveDescriptor);
 			POIValIceHengeDescriptor = Localizer.Format(POIValIceHengeDescriptor);
 			POIRandolithDescriptor = Localizer.Format(POIRandolithDescriptor);
+
+            stringsLoaded = true;
 		}
 
 		private static IEnumerator parseProgressTree()
@@ -234,12 +244,21 @@ namespace ProgressParser
 
 			updateCompletionRecord();
 
+            loaded = true;
+
+            onProgressParsed.Fire();
+
+            Debug.Log("[Progress Tracking Parser] Progress Nodes Loaded...");
+		}
+
+        private static IEnumerator editorParseDelay()
+        {
+            yield return new WaitForEndOfFrame();
+
 			loaded = true;
 
 			onProgressParsed.Fire();
-
-			Debug.Log("[Progress Tracking Parser] Progress Nodes Loaded...");
-		}
+        }
 
 		private static void loadIntervalNodes()
 		{
@@ -491,7 +510,7 @@ namespace ProgressParser
                 else if (t == typeof(ReachSpace))
                     return ((ReachSpace)n).firstVessel;
                 else if (t == typeof(PointOfInterest))
-                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[4].GetValue(n);
+                    return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[5].GetValue(n);
                 else if (t == typeof(TowerBuzz))
                     return (VesselRef)t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)[3].GetValue(n);
 			}
